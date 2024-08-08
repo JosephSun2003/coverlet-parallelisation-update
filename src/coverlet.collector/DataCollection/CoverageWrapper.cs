@@ -71,9 +71,9 @@ namespace Coverlet.Collector.DataCollection
       coverage.PrepareModules();
     }
 
-    public void UnloadModule(Coverage coverage, string modulePath)
+    public int UnloadModule(Coverage coverage, string modulePath)
     {
-      coverage.UnloadModule(modulePath);
+      return coverage.UnloadModule(modulePath);
     }
   }
 }

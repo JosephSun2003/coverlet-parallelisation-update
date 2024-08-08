@@ -82,6 +82,11 @@ namespace Coverlet.Collector.DataCollection
       return GetCoverageReports(coverageResult);
     }
 
+    public int UnloadModule(string modulePath)
+    {
+      return _coverageWrapper.UnloadModule(_coverage, modulePath);
+    }
+
     /// <summary>
     /// Gets coverlet coverage result
     /// </summary>
