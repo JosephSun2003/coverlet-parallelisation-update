@@ -59,7 +59,6 @@ namespace Coverlet.Core
     private readonly CoverageParameters _parameters;
 
     public string Identifier { get; }
-    private List<string> unloadedModules { get; set; }
 
     public Coverage(string moduleOrDirectory,
         CoverageParameters parameters,
@@ -79,7 +78,6 @@ namespace Coverlet.Core
       _cecilSymbolHelper = cecilSymbolHelper;
       Identifier = Guid.NewGuid().ToString();
       _results = new List<InstrumenterResult>();
-      unloadedModules = new List<string>();
     }
 
     public Coverage(CoveragePrepareResult prepareResult,
@@ -243,10 +241,7 @@ namespace Coverlet.Core
         }
 
         modules.Add(Path.GetFileName(result.ModulePath), documents);
-        if (!unloadedModules.Contains(result.ModulePath))
-        {
-          UnloadModule(result.ModulePath);
-        }
+        _instrumentationHelper.RestoreOriginalModule(result.ModulePath, Identifier);
       }
 
       // In case of anonymous delegate compiler generate a custom class and passes it as type.method delegate.
@@ -329,16 +324,6 @@ namespace Coverlet.Core
       }
 
       return coverageResult;
-    }
-
-    /// <summary>
-    /// Manually invoke the unloading of modules and restoration of the original assembly files
-    /// </summary>
-    /// <param name="modulePath"></param>
-    public void UnloadModule(string modulePath)
-    {
-      unloadedModules.Add(modulePath);
-      _instrumentationHelper.RestoreOriginalModule(modulePath, Identifier);
     }
 
     private bool BranchInCompilerGeneratedClass(string methodName)
