@@ -190,6 +190,7 @@ namespace Coverlet.Core.Tests
       File.Copy(pdb, Path.Combine(directory.FullName, Path.GetFileName(pdb)), true);
 
       var mockInstrumentationHelper = new Mock<IInstrumentationHelper>();
+      mockInstrumentationHelper.Setup(x => x.RestoreOriginalModule(It.IsAny<string>(), It.IsAny<string>()));
 
       var parameters = new CoverageParameters
       {
@@ -224,9 +225,10 @@ namespace Coverlet.Core.Tests
       File.Copy(pdb, Path.Combine(directory.FullName, Path.GetFileName(pdb)), true);
 
       var mockInstrumentationHelper = new Mock<IInstrumentationHelper>();
-        mockInstrumentationHelper
-          .Setup(x => x.SelectModules(It.IsAny<IEnumerable<string>>(), It.IsAny<string[]>(), It.IsAny<string[]>()))
-          .Returns(new List<string>(){"ModuleX"});
+      mockInstrumentationHelper
+        .Setup(x => x.SelectModules(It.IsAny<IEnumerable<string>>(), It.IsAny<string[]>(), It.IsAny<string[]>()))
+        .Returns(new List<string>(){"ModuleX"});
+      mockInstrumentationHelper.Setup(x => x.RestoreOriginalModule(It.IsAny<string>(), It.IsAny<string>()));
 
       var parameters = new CoverageParameters
       {
